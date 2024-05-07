@@ -1,4 +1,4 @@
-import requests, subprocess, time, os
+import requests, subprocess, time, os, winreg
 
 
 
@@ -6,6 +6,17 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 from steamUser import steamUser
 
 # Инициализация DB
+
+
+def find_steam():
+    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Valve\\Steam")
+    value = winreg.QueryValueEx(key, "InstallPath")[0]
+    steam_accid_folder = os.listdir(path=f"{value}\\userdata")
+    for i in range(len(steam_accid_folder)):
+        print(steam_accid_folder[0])
+        steam_accid_folder.pop(0)
+    return 'Work'
+
 
 def get_account_id(steamid):
     steamid = steamid
@@ -88,6 +99,7 @@ def send_record(steamid, name, numofrep, files):
     steam_icon = steaminfo['avatars']
     steam_steamid = steaminfo['steamid64']
     steam_online = steaminfo['onlinestate']
+    # TODO Исправить онлайн статус
     steam_visible = steaminfo['visibilityState']
     steam_nickname = steaminfo['name']
     steam_vac_status = steamvac[0]
